@@ -11,7 +11,7 @@ let dragOffsetX, dragOffsetY;
 let imageScaleFactor = 1;
 
 function preload() {
-  bgImage = loadImage('AFTERLIFE (1).jpg');
+  bgImage = loadImage('AFTERLIFE.png');
 }
 
 function setup() {
