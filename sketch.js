@@ -13,39 +13,39 @@ function setup() {
   textInput = createInput('');
   textInput.position(width / 2 - textInput.width / 2, height / 2);
 
-  // Color picker for text color
+  // Create color pickers and set their positions
   let textColorPicker = createColorPicker('#000000');
   textColorPicker.position(20, 20);
-  textColorPicker.input(() => textInput.style('color', textColorPicker.value()));
-
-  // Color picker for background color
-  let bgColorPicker = createColorPicker('#ffffff');
-  bgColorPicker.position(20, 50);
-  bgColorPicker.input(() => textInput.style('background', bgColorPicker.value()));
-
-  plusButton = createImg('path_to_your_plus_button.png', 'plus button');
-  plusButton.position(width - 50, 50);
-  plusButton.mouseClicked(() => {
-    galleryVisible = !galleryVisible;
+  textColorPicker.input(() => {
+    textInput.style('color', textColorPicker.value());
   });
 
+  let bgColorPicker = createColorPicker('#ffffff');
+  bgColorPicker.position(20, 50);
+  bgColorPicker.input(() => {
+    textInput.style('background-color', bgColorPicker.value());
+  });
+
+  // Setup plus button
+  plusButton = createImg('path_to_your_plus_button.png', 'plus button');
+  plusButton.position(width - 50, 50);
+  plusButton.mousePressed(toggleGallery);
+
+  // Setup download button
   downloadButton = createImg('path_to_your_download_button.png', 'download button');
   downloadButton.position(width - 50, 100);
-  downloadButton.mouseClicked(() => {
+  downloadButton.mousePressed(() => {
     saveCanvas('myCanvas', 'png');
   });
 
   // Placeholder images for gallery
   let imgUrls = ['placeholder1.png', 'placeholder2.png', 'placeholder3.png'];
   imgUrls.forEach(url => {
-    let img = createImg(url, () => {
+    let img = createImg(url, '', () => {
       img.hide();
       galleryImages.push(img);
     });
   });
-
-  textAlign(CENTER);
-  textSize(24);
 }
 
 function draw() {
@@ -56,6 +56,10 @@ function draw() {
   if (galleryVisible && galleryImages.length > 0) {
     drawGallery();
   }
+}
+
+function toggleGallery() {
+  galleryVisible = !galleryVisible;
 }
 
 function drawGallery() {
@@ -76,5 +80,4 @@ function drop(event) {
     });
   }
 }
-
 
