@@ -5,7 +5,7 @@ let galleryImages = [];
 let plusButton, downloadButton;
 
 function preload() {
-  bgImage = loadImage('AFTERLIFE.png'); // Update with the correct path
+  bgImage = loadImage('AFTERLIFE.png'); // Make sure the path is correct
 }
 
 function setup() {
@@ -26,16 +26,16 @@ function setup() {
     textInput.style('background-color', bgColorPicker.value());
   });
 
-  // Setup plus button
-  plusButton = createImg('plusbutton.png', 'plus button');
-  plusButton.position(width - 150, 50); // Adjust position as needed
-  plusButton.size(30, 30); // Adjust size as needed
+  // Setup plus button with adjusted position and size
+  plusButton = createImg('path_to_your_plus_button.png', 'plus button');
+  plusButton.position(20, 80); // Adjusted to the left
+  plusButton.size(30, 30); // Smaller size
   plusButton.mousePressed(toggleGallery);
 
-  // Setup download button
-  downloadButton = createImg('heaveanangel.png', 'download button');
-  downloadButton.position(width - 150, 100); // Adjust position as needed
-  downloadButton.size(30, 30); // Adjust size as needed
+  // Setup download button with adjusted position and size
+  downloadButton = createImg('path_to_your_download_button.png', 'download button');
+  downloadButton.position(20, 120); // Adjusted to the left
+  downloadButton.size(30, 30); // Smaller size
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
   // Initialize gallery area
@@ -80,7 +80,7 @@ function drawGallery() {
 }
 
 function mousePressed() {
-  if (dist(mouseX, mouseY, width - 150, 50) < 20) {
+  if (dist(mouseX, mouseY, 20, 80) < 15) {
     toggleGallery();
   }
 }
