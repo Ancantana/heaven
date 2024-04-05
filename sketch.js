@@ -3,6 +3,7 @@ let textInput;
 let galleryVisible = false;
 let galleryImages = [];
 let plusButton, downloadButton;
+let galleryArea;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png'); // Make sure the path is correct
@@ -13,16 +14,16 @@ function setup() {
   textInput = createInput('');
   textInput.position(width / 2 - textInput.width / 2, height / 2);
 
-  // Create color pickers and set their positions
+  // Setup color pickers
   let textColorPicker = createColorPicker('#000000');
   textColorPicker.position(20, 20);
-  textColorPicker.input(() => {
+  textColorPicker.changed(() => {
     textInput.style('color', textColorPicker.value());
   });
 
   let bgColorPicker = createColorPicker('#ffffff');
   bgColorPicker.position(20, 50);
-  bgColorPicker.input(() => {
+  bgColorPicker.changed(() => {
     textInput.style('background-color', bgColorPicker.value());
   });
 
@@ -34,18 +35,18 @@ function setup() {
   // Setup download button
   downloadButton = createImg('path_to_your_download_button.png', 'download button');
   downloadButton.position(width - 50, 100);
+
   downloadButton.mousePressed(() => {
     saveCanvas('myCanvas', 'png');
   });
 
-  // Placeholder images for gallery
-  let imgUrls = ['placeholder1.png', 'placeholder2.png', 'placeholder3.png'];
-  imgUrls.forEach(url => {
-    let img = createImg(url, '', () => {
-      img.hide();
-      galleryImages.push(img);
-    });
-  });
+  // Define the gallery area
+  galleryArea = {
+    x: width - 327,
+    y: 0,
+    width: 327,
+    height: 344
+  };
 }
 
 function draw() {
@@ -53,21 +54,18 @@ function draw() {
     background(bgImage);
   }
 
-  if (galleryVisible && galleryImages.length > 0) {
-    drawGallery();
+  if (galleryVisible) {
+    fill(255);
+    rect(galleryArea.x, galleryArea.y, galleryArea.width, galleryArea.height);
+    // Draw images in the gallery
+    galleryImages.forEach((img, i) => {
+      image(img, galleryArea.x + 10, galleryArea.y + i * 100 + 10, 80, 80);
+    });
   }
 }
 
 function toggleGallery() {
   galleryVisible = !galleryVisible;
-}
-
-function drawGallery() {
-  fill(255);
-  rect(width - 200, 0, 200, height);
-  for (let i = 0; i < galleryImages.length; i++) {
-    image(galleryImages[i], width - 190, i * 100 + 50, 80, 80);
-  }
 }
 
 function drop(event) {
@@ -80,4 +78,3 @@ function drop(event) {
     });
   }
 }
-
