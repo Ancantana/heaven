@@ -2,7 +2,7 @@ let bgImage;
 let textInput;
 let galleryVisible = false;
 let galleryImages = [];
-let draggedImages = []; // Array to store dragged images
+let draggedImages = [];
 let plusButton, downloadButton;
 let selectedImage = null;
 let offsetX, offsetY;
@@ -11,7 +11,7 @@ let dragOffsetX, dragOffsetY;
 let imageScaleFactor = 1;
 
 function preload() {
-  bgImage = loadImage('AFTERLIFE.png');
+  bgImage = loadImage('AFTERLIFE (1).jpg');
 }
 
 function setup() {
@@ -19,12 +19,12 @@ function setup() {
   textInput = createInput('');
   textInput.position(width / 2 - textInput.width / 2, height / 2);
 
-  plusButton = createImg('plusbutton.png', 'plus button');
+  plusButton = createImg('https://ancantana.github.io/heaven/plusbutton.png', 'plus button');
   plusButton.position(20, 80);
   plusButton.size(30, 30);
   plusButton.mousePressed(toggleGallery);
 
-  downloadButton = createImg('heaveanangel.png', 'download button');
+  downloadButton = createImg('https://ancantana.github.io/heaven/heaveanangel.png', 'download button');
   downloadButton.position(20, 120);
   downloadButton.size(30, 30);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
@@ -108,21 +108,18 @@ function mousePressed() {
           draggedImage = img;
           dragOffsetX = mouseX - imgX;
           dragOffsetY = mouseY - imgY;
+          imageScaleFactor = 1; // Reset the scale factor when dragging a new image
         }
       }
     });
 
     // Check if the mouse is over a dragged image
     draggedImages.forEach(({ img, x, y, w, h }, i) => {
-      if (
-        mouseX >= x &&
-        mouseX <= x + w &&
-        mouseY >= y &&
-        mouseY <= y + h
-      ) {
+      if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
         draggedImages[i].isDragged = true;
         dragOffsetX = mouseX - x;
         dragOffsetY = mouseY - y;
+        imageScaleFactor = 1; // Reset the scale factor when dragging an existing image
       }
     });
   }
@@ -137,12 +134,7 @@ function mouseDragged() {
     let imgH = draggedImage.height * imageScaleFactor;
 
     // Check if the dragged image is outside the gallery
-    if (
-      imgX < width - 330 ||
-      imgX + imgW > width - 3 ||
-      imgY < 0 ||
-      imgY + imgH > height
-    ) {
+    if (imgX < width - 330 || imgX + imgW > width - 3 || imgY < 0 || imgY + imgH > height) {
       // Add the dragged image to the draggedImages array
       draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, isDragged: false });
       draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
