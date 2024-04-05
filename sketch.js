@@ -11,6 +11,7 @@ let imageScaleFactor = 1;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
+  loadGalleryImages();
 }
 
 function setup() {
@@ -27,8 +28,6 @@ function setup() {
   downloadButton.position(20, 120);
   downloadButton.size(30, 30);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
-
-  initGallery();
 }
 
 function draw() {
@@ -40,17 +39,13 @@ function draw() {
   }
 }
 
-function initGallery() {
+function loadGalleryImages() {
   let imgUrls = [
     'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
     'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
     'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png'
   ];
-  imgUrls.forEach(url => {
-    let img = createImg(url, 'image');
-    img.hide();
-    galleryImages.push(img);
-  });
+  galleryImages = imgUrls.map(url => loadImage(url));
 }
 
 function toggleGallery() {
@@ -62,20 +57,22 @@ function drawGallery() {
   rect(width - 330, 0, 327, 344);
 
   galleryImages.forEach((img, i) => {
-    let imgX = width - 320;
-    let imgY = i * 110 + 10;
-    let imgW = 100;
-    let imgH = 100;
+    if (img.width > 0 && img.height > 0) { // Check if the image is loaded
+      let imgX = width - 320;
+      let imgY = i * 110 + 10;
+      let imgW = 100;
+      let imgH = 100;
 
-    if (galleryVisible) {
-      image(img, imgX, imgY, imgW, imgH);
-    }
+      if (galleryVisible) {
+        image(img, imgX, imgY, imgW, imgH);
+      }
 
-    // Check if the mouse is over this image
-    if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
-      cursor(MOVE);
-    } else {
-      cursor(ARROW);
+      // Check if the mouse is over this image
+      if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
+        cursor(MOVE);
+      } else {
+        cursor(ARROW);
+      }
     }
   });
 
@@ -94,20 +91,17 @@ function mousePressed() {
     toggleGallery();
   } else {
     galleryImages.forEach((img, i) => {
-      let imgX = width - 320;
-      let imgY = i * 110 + 10;
-      let imgW = 100;
-      let imgH = 100;
+      if (img.width > 0 && img.height > 0) { // Check if the image is loaded
+        let imgX = width - 320;
+        let imgY = i * 110 + 10;
+        let imgW = 100;
+        let imgH = 100;
 
-      if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
-        draggedImage = img;
-        dragOffsetX = mouseX - imgX;
-        dragOffsetY = mouseY - imgY;
-
-        // Add a new copy of the image to the gallery
-        let newImg = createImg(img.elt.src, 'image');
-        newImg.hide();
-        galleryImages.push(newImg);
+        if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
+          draggedImage = img;
+          dragOffsetX = mouseX - imgX;
+          dragOffsetY = mouseY - imgY;
+        }
       }
     });
   }
