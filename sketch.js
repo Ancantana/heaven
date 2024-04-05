@@ -2,6 +2,7 @@ let bgImage;
 let textInput;
 let galleryVisible = false;
 let galleryImages = [];
+let draggedImages = []; // Array to store dragged images
 let plusButton, downloadButton;
 let selectedImage = null;
 let offsetX, offsetY;
@@ -38,6 +39,11 @@ function draw() {
   if (galleryVisible) {
     drawGallery();
   }
+
+  // Draw dragged images on top
+  draggedImages.forEach(({ img, x, y, w, h }) => {
+    image(img, x, y, w, h);
+  });
 }
 
 function loadGalleryImages() {
@@ -81,15 +87,6 @@ function drawGallery() {
       }
     }
   });
-
-  // Draw the dragged image on top
-  if (draggedImage) {
-    let imgX = mouseX - dragOffsetX;
-    let imgY = mouseY - dragOffsetY;
-    let imgW = draggedImage.width * imageScaleFactor;
-    let imgH = draggedImage.height * imageScaleFactor;
-    image(draggedImage, imgX, imgY, imgW, imgH);
-  }
 }
 
 function mousePressed() {
@@ -116,6 +113,22 @@ function mousePressed() {
 function mouseDragged() {
   if (draggedImage) {
     // Update the position of the dragged image
+    let imgX = mouseX - dragOffsetX;
+    let imgY = mouseY - dragOffsetY;
+    let imgW = draggedImage.width * imageScaleFactor;
+    let imgH = draggedImage.height * imageScaleFactor;
+
+    // Check if the dragged image is outside the gallery
+    if (
+      imgX < width - 330 ||
+      imgX + imgW > width - 3 ||
+      imgY < 0 ||
+      imgY + imgH > height
+    ) {
+      // Add the dragged image to the draggedImages array
+      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH });
+      draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
+    }
   }
 }
 
