@@ -3,10 +3,9 @@ let textInput;
 let galleryVisible = false;
 let galleryImages = [];
 let plusButton, downloadButton;
-let galleryArea;
 
 function preload() {
-  bgImage = loadImage('AFTERLIFE.png'); // Make sure the path is correct
+  bgImage = loadImage('AFTERLIFE.png'); // Update with the correct path
 }
 
 function setup() {
@@ -17,36 +16,37 @@ function setup() {
   // Setup color pickers
   let textColorPicker = createColorPicker('#000000');
   textColorPicker.position(20, 20);
-  textColorPicker.changed(() => {
+  textColorPicker.input(() => {
     textInput.style('color', textColorPicker.value());
   });
 
   let bgColorPicker = createColorPicker('#ffffff');
   bgColorPicker.position(20, 50);
-  bgColorPicker.changed(() => {
+  bgColorPicker.input(() => {
     textInput.style('background-color', bgColorPicker.value());
   });
 
   // Setup plus button
   plusButton = createImg('path_to_your_plus_button.png', 'plus button');
-  plusButton.position(width - 50, 50);
+  plusButton.position(width - 100, 50);
   plusButton.mousePressed(toggleGallery);
 
   // Setup download button
   downloadButton = createImg('path_to_your_download_button.png', 'download button');
-  downloadButton.position(width - 50, 100);
+  downloadButton.position(width - 100, 100);
+  downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
-  downloadButton.mousePressed(() => {
-    saveCanvas('myCanvas', 'png');
+  // Initialize gallery area
+  initGallery();
+}
+
+function initGallery() {
+  let imgUrls = ['placeholder1.png', 'placeholder2.png', 'placeholder3.png']; // Replace with actual URLs
+  imgUrls.forEach(url => {
+    let img = createImg(url, 'image');
+    img.hide();
+    galleryImages.push(img);
   });
-
-  // Define the gallery area
-  galleryArea = {
-    x: width - 327,
-    y: 0,
-    width: 327,
-    height: 344
-  };
 }
 
 function draw() {
@@ -55,12 +55,7 @@ function draw() {
   }
 
   if (galleryVisible) {
-    fill(255);
-    rect(galleryArea.x, galleryArea.y, galleryArea.width, galleryArea.height);
-    // Draw images in the gallery
-    galleryImages.forEach((img, i) => {
-      image(img, galleryArea.x + 10, galleryArea.y + i * 100 + 10, 80, 80);
-    });
+    drawGallery();
   }
 }
 
@@ -68,13 +63,22 @@ function toggleGallery() {
   galleryVisible = !galleryVisible;
 }
 
-function drop(event) {
-  event.preventDefault();
-  let file = event.dataTransfer.files[0];
-  if (file.type.startsWith('image/')) {
-    let droppedImage = createImg(URL.createObjectURL(file), () => {
-      droppedImage.hide();
-      galleryImages.push(droppedImage);
-    });
+function drawGallery() {
+  fill(255);
+  rect(width - 330, 0, 327, 344); // Adjust size as needed
+  galleryImages.forEach((img, i) => {
+    if (galleryVisible) {
+      img.show();
+      img.position(width - 320, i * 110 + 10); // Adjust position as needed
+    } else {
+      img.hide();
+    }
+  });
+}
+
+function mousePressed() {
+  if (dist(mouseX, mouseY, width - 100, 50) < 20) {
+    toggleGallery();
   }
 }
+
