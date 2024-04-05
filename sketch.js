@@ -13,7 +13,7 @@ function setup() {
   textInput = createInput('');
   textInput.position(width / 2 - textInput.width / 2, height / 2);
 
-  plusButton = createImg('https://assets.editor.p5js.org/user/asset/plus-button.png', () => {
+  plusButton = createImg('original_68a6e54cf27de8b5bd0d2b9e7fc871f5.gif', () => {
     plusButton.hide();
     loadPixels();
   });
