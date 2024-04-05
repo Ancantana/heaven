@@ -27,7 +27,7 @@ function setup() {
   });
 
   // Setup plus button
-  plusButton = createImg('original_68a6e54cf27de8b5bd0d2b9e7fc871f5.gif', 'plus button');
+  plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(width - 100, 50);
   plusButton.mousePressed(toggleGallery);
 
