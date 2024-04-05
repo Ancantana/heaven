@@ -28,12 +28,12 @@ function setup() {
 
   // Setup plus button
   plusButton = createImg('plusbutton.png', 'plus button');
-  plusButton.position(width - 100, 50);
+  plusButton.position(width - 50, 50);
   plusButton.mousePressed(toggleGallery);
 
   // Setup download button
   downloadButton = createImg('heaveanangel.png', 'download button');
-  downloadButton.position(width - 100, 100);
+  downloadButton.position(width - 10, 100);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
   // Initialize gallery area
