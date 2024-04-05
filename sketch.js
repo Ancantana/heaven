@@ -41,7 +41,11 @@ function draw() {
 }
 
 function initGallery() {
-  let imgUrls = ['original\\_77f8f96b25a80928f3f31b83d967fd2d.png', 'original\\_77f8f96b25a80928f3f31b83d967fd2d.png', 'original\\_77f8f96b25a80928f3f31b83d967fd2d.png'];
+  let imgUrls = [
+    'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
+    'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
+    'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png'
+  ];
   imgUrls.forEach(url => {
     let img = createImg(url, 'image');
     img.hide();
