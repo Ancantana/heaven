@@ -27,26 +27,19 @@ function setup() {
   });
 
   // Setup plus button
-  plusButton = createImg('plusbutton.png', 'plus button');
-  plusButton.position(width - 50, 50);
+  plusButton = createImg('path_to_your_plus_button.png', 'plus button');
+  plusButton.position(width - 150, 50); // Adjust position as needed
+  plusButton.size(30, 30); // Adjust size as needed
   plusButton.mousePressed(toggleGallery);
 
   // Setup download button
-  downloadButton = createImg('heaveanangel.png', 'download button');
-  downloadButton.position(width - 10, 100);
+  downloadButton = createImg('path_to_your_download_button.png', 'download button');
+  downloadButton.position(width - 150, 100); // Adjust position as needed
+  downloadButton.size(30, 30); // Adjust size as needed
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
   // Initialize gallery area
   initGallery();
-}
-
-function initGallery() {
-  let imgUrls = ['placeholder1.png', 'placeholder2.png', 'placeholder3.png']; // Replace with actual URLs
-  imgUrls.forEach(url => {
-    let img = createImg(url, 'image');
-    img.hide();
-    galleryImages.push(img);
-  });
 }
 
 function draw() {
@@ -59,8 +52,18 @@ function draw() {
   }
 }
 
+function initGallery() {
+  let imgUrls = ['placeholder1.png', 'placeholder2.png', 'placeholder3.png']; // Replace with actual URLs
+  imgUrls.forEach(url => {
+    let img = createImg(url, 'image');
+    img.hide();
+    galleryImages.push(img);
+  });
+}
+
 function toggleGallery() {
   galleryVisible = !galleryVisible;
+  drawGallery();
 }
 
 function drawGallery() {
@@ -77,7 +80,7 @@ function drawGallery() {
 }
 
 function mousePressed() {
-  if (dist(mouseX, mouseY, width - 100, 50) < 20) {
+  if (dist(mouseX, mouseY, width - 150, 50) < 20) {
     toggleGallery();
   }
 }
