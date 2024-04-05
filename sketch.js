@@ -32,7 +32,7 @@ function setup() {
   plusButton.mousePressed(toggleGallery);
 
   // Setup download button
-  downloadButton = createImg('path_to_your_download_button.png', 'download button');
+  downloadButton = createImg('original_b641f31629023dd8c92c4813491ada96 (1).gif', 'download button');
   downloadButton.position(width - 100, 100);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
 
