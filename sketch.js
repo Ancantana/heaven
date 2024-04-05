@@ -11,7 +11,6 @@ let imageScaleFactor = 1;
 
 function preload() {
   bgImage = loadImage('AFTERLIFE.png');
-  loadGalleryImages();
 }
 
 function setup() {
@@ -28,6 +27,8 @@ function setup() {
   downloadButton.position(20, 120);
   downloadButton.size(30, 30);
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
+
+  loadGalleryImages();
 }
 
 function draw() {
@@ -45,7 +46,12 @@ function loadGalleryImages() {
     'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png',
     'https://ancantana.github.io/heaven/original_77f8f96b25a80928f3f31b83d967fd2d.png'
   ];
-  galleryImages = imgUrls.map(url => loadImage(url));
+
+  imgUrls.forEach((url, i) => {
+    let img = loadImage(url, () => {
+      galleryImages[i] = img;
+    });
+  });
 }
 
 function toggleGallery() {
@@ -57,7 +63,7 @@ function drawGallery() {
   rect(width - 330, 0, 327, 344);
 
   galleryImages.forEach((img, i) => {
-    if (img.width > 0 && img.height > 0) { // Check if the image is loaded
+    if (img && img.width > 0 && img.height > 0) {
       let imgX = width - 320;
       let imgY = i * 110 + 10;
       let imgW = 100;
@@ -91,7 +97,7 @@ function mousePressed() {
     toggleGallery();
   } else {
     galleryImages.forEach((img, i) => {
-      if (img.width > 0 && img.height > 0) { // Check if the image is loaded
+      if (img && img.width > 0 && img.height > 0) {
         let imgX = width - 320;
         let imgY = i * 110 + 10;
         let imgW = 100;
