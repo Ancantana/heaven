@@ -13,33 +13,39 @@ function setup() {
   textInput = createInput('');
   textInput.position(width / 2 - textInput.width / 2, height / 2);
 
-  plusButton = createImg('original_68a6e54cf27de8b5bd0d2b9e7fc871f5.gif', () => {
-    plusButton.hide();
-    loadPixels();
+  // Color picker for text color
+  let textColorPicker = createColorPicker('#000000');
+  textColorPicker.position(20, 20);
+  textColorPicker.input(() => textInput.style('color', textColorPicker.value()));
+
+  // Color picker for background color
+  let bgColorPicker = createColorPicker('#ffffff');
+  bgColorPicker.position(20, 50);
+  bgColorPicker.input(() => textInput.style('background', bgColorPicker.value()));
+
+  plusButton = createImg('path_to_your_plus_button.png', 'plus button');
+  plusButton.position(width - 50, 50);
+  plusButton.mouseClicked(() => {
+    galleryVisible = !galleryVisible;
   });
 
-  downloadButton = createImg('https://assets.editor.p5js.org/user/asset/download-button.png', () => {
-    downloadButton.hide();
-    loadPixels();
+  downloadButton = createImg('path_to_your_download_button.png', 'download button');
+  downloadButton.position(width - 50, 100);
+  downloadButton.mouseClicked(() => {
+    saveCanvas('myCanvas', 'png');
   });
 
-  let img1 = createImg('https://assets.editor.p5js.org/user/asset/image1.png', () => {
-    img1.hide();
-    loadPixels();
-    galleryImages.push(img1);
+  // Placeholder images for gallery
+  let imgUrls = ['placeholder1.png', 'placeholder2.png', 'placeholder3.png'];
+  imgUrls.forEach(url => {
+    let img = createImg(url, () => {
+      img.hide();
+      galleryImages.push(img);
+    });
   });
 
-  let img2 = createImg('https://assets.editor.p5js.org/user/asset/image2.png', () => {
-    img2.hide();
-    loadPixels();
-    galleryImages.push(img2);
-  });
-
-  let img3 = createImg('https://assets.editor.p5js.org/user/asset/image3.png', () => {
-    img3.hide();
-    loadPixels();
-    galleryImages.push(img3);
-  });
+  textAlign(CENTER);
+  textSize(24);
 }
 
 function draw() {
@@ -47,24 +53,8 @@ function draw() {
     background(bgImage);
   }
 
-  if (plusButton && plusButton.elt.complete && downloadButton && downloadButton.elt.complete) {
-    imageMode(CENTER);
-    image(plusButton, width - 50, 50, 40, 40);
-    image(downloadButton, width - 50, 100, 40, 40);
-  }
-
-  if (galleryVisible && galleryImages.length > 0 && galleryImages.every(img => img.elt.complete)) {
+  if (galleryVisible && galleryImages.length > 0) {
     drawGallery();
-  }
-}
-
-function mousePressed() {
-  if (dist(mouseX, mouseY, width - 50, 50) < 20) {
-    galleryVisible = !galleryVisible;
-  }
-
-  if (dist(mouseX, mouseY, width - 50, 100) < 20) {
-    saveCanvas('myCanvas', 'png');
   }
 }
 
@@ -76,22 +66,14 @@ function drawGallery() {
   }
 }
 
-function dragEnter() {
-  background(200);
-}
-
-function dragLeave() {
-  if (bgImage) {
-    background(bgImage);
-  }
-}
-
-function drop(file) {
-  if (file.type === 'image') {
-    let droppedImage = createImg(file.data, () => {
+function drop(event) {
+  event.preventDefault();
+  let file = event.dataTransfer.files[0];
+  if (file.type.startsWith('image/')) {
+    let droppedImage = createImg(URL.createObjectURL(file), () => {
       droppedImage.hide();
-      loadPixels();
-      image(droppedImage, mouseX, mouseY, 100, 100);
+      galleryImages.push(droppedImage);
     });
   }
 }
+
