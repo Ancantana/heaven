@@ -106,9 +106,9 @@ function mousePressed() {
 
         if (mouseX >= imgX && mouseX <= imgX + imgW && mouseY >= imgY && mouseY <= imgY + imgH) {
           draggedImage = img;
-          dragOffsetX = mouseX - imgX;
-          dragOffsetY = mouseY - imgY;
-          imageScaleFactor = 1; // Reset the scale factor when dragging a new image
+          dragOffsetX = mouseX - (imgX + imgW / 2); // Calculate the offset from the center of the image
+          dragOffsetY = mouseY - (imgY + imgH / 2);
+          imageScaleFactor = 2; // Set the initial scale factor for dropped images
         }
       }
     });
@@ -117,9 +117,8 @@ function mousePressed() {
     draggedImages.forEach(({ img, x, y, w, h }, i) => {
       if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
         draggedImages[i].isDragged = true;
-        dragOffsetX = mouseX - x;
-        dragOffsetY = mouseY - y;
-        imageScaleFactor = 1; // Reset the scale factor when dragging an existing image
+        dragOffsetX = mouseX - (x + w / 2); // Calculate the offset from the center of the image
+        dragOffsetY = mouseY - (y + h / 2);
       }
     });
   }
@@ -133,12 +132,9 @@ function mouseDragged() {
     let imgW = draggedImage.width * imageScaleFactor;
     let imgH = draggedImage.height * imageScaleFactor;
 
-    // Check if the dragged image is outside the gallery
-    if (imgX < width - 330 || imgX + imgW > width - 3 || imgY < 0 || imgY + imgH > height) {
-      // Add the dragged image to the draggedImages array
-      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, isDragged: false });
-      draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
-    }
+    // Add the dragged image to the draggedImages array
+    draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, isDragged: false });
+    draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
   } else {
     // Check if a dragged image is being moved
     draggedImages.forEach(({ img, x, y, w, h, isDragged }, i) => {
