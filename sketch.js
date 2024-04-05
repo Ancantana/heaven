@@ -41,8 +41,12 @@ function draw() {
   }
 
   // Draw dragged images on top
-  draggedImages.forEach(({ img, x, y, w, h }) => {
-    image(img, x, y, w, h);
+  draggedImages.forEach(({ img, x, y, w, h, isDragged }, i) => {
+    if (isDragged) {
+      image(img, mouseX - dragOffsetX, mouseY - dragOffsetY, w * imageScaleFactor, h * imageScaleFactor);
+    } else {
+      image(img, x, y, w, h);
+    }
   });
 }
 
@@ -107,6 +111,20 @@ function mousePressed() {
         }
       }
     });
+
+    // Check if the mouse is over a dragged image
+    draggedImages.forEach(({ img, x, y, w, h }, i) => {
+      if (
+        mouseX >= x &&
+        mouseX <= x + w &&
+        mouseY >= y &&
+        mouseY <= y + h
+      ) {
+        draggedImages[i].isDragged = true;
+        dragOffsetX = mouseX - x;
+        dragOffsetY = mouseY - y;
+      }
+    });
   }
 }
 
@@ -126,20 +144,44 @@ function mouseDragged() {
       imgY + imgH > height
     ) {
       // Add the dragged image to the draggedImages array
-      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH });
+      draggedImages.push({ img: draggedImage, x: imgX, y: imgY, w: imgW, h: imgH, isDragged: false });
       draggedImage = null; // Reset draggedImage to allow dragging a new image from the gallery
     }
+  } else {
+    // Check if a dragged image is being moved
+    draggedImages.forEach(({ img, x, y, w, h, isDragged }, i) => {
+      if (isDragged) {
+        draggedImages[i].x = mouseX - dragOffsetX;
+        draggedImages[i].y = mouseY - dragOffsetY;
+      }
+    });
   }
 }
 
 function mouseReleased() {
   draggedImage = null;
+  draggedImages.forEach((draggedImage, i) => {
+    draggedImages[i].isDragged = false;
+  });
 }
 
 function mouseWheel(event) {
+  let scaleFactor = event.delta * 0.01; // Adjust the scaling factor based on the scroll direction
+
   if (draggedImage) {
-    imageScaleFactor += event.delta * 0.01; // Adjust the scaling factor based on the scroll direction
+    imageScaleFactor += scaleFactor;
     imageScaleFactor = constrain(imageScaleFactor, 0.5, 2); // Constrain the scaling factor to a reasonable range
+  } else {
+    // Check if a dragged image is being resized
+    draggedImages.forEach(({ img, x, y, w, h, isDragged }, i) => {
+      if (isDragged) {
+        let newW = w + w * scaleFactor;
+        let newH = h + h * scaleFactor;
+        draggedImages[i].w = newW;
+        draggedImages[i].h = newH;
+      }
+    });
   }
+
   return false; // Prevent default scrolling behavior
 }
