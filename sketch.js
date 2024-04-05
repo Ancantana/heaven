@@ -27,13 +27,13 @@ function setup() {
   });
 
   // Setup plus button
-  plusButton = createImg('path_to_your_plus_button.png', 'plus button');
+  plusButton = createImg('plusbutton.png', 'plus button');
   plusButton.position(width - 150, 50); // Adjust position as needed
   plusButton.size(30, 30); // Adjust size as needed
   plusButton.mousePressed(toggleGallery);
 
   // Setup download button
-  downloadButton = createImg('path_to_your_download_button.png', 'download button');
+  downloadButton = createImg('heaveanangel.png', 'download button');
   downloadButton.position(width - 150, 100); // Adjust position as needed
   downloadButton.size(30, 30); // Adjust size as needed
   downloadButton.mousePressed(() => saveCanvas('myCanvas', 'png'));
